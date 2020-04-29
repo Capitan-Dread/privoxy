@@ -1,4 +1,0 @@
-#CB_HOME=/data/data/org.connectbot
-CB_HOME=/sdcard
-[ /sdcard/usr/sbin/privoxy -nt $CB_HOME/privoxy ] && cat /sdcard/usr/sbin/privoxy > $CB_HOME/privoxy && chmod 755 $CB_HOME/privoxy
-$CB_HOME/privoxy --no-daemon /sdcard/etc/privoxy/config
