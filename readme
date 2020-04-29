@@ -1,0 +1,35 @@
+Privoxy for Android
+
+This release targets all Android devices that use an ARM7 processor or newer. Practically-speaking that means it should run on all Android devices released since 2011 or so. It has been tested only on devices running point releases of Android 4 & 5, but a priori I see no reason why it should not run on earlier Android versions. If you find it working for you, please post on the ijbswa-users@sourceforge.net mailing list, reporting your device name and Android version.
+
+
+Installation Instructions
+
+1. Extract the zip to /sdcard/. The zip contains the dirs etc,usr,var and a script named 'privoxy.start'.
+2. Install Connectbot (from F-Droid or the Play Store at your preference).Connectbot is a terminal client we will use to start Privoxy locally without requiring root.
+3. Start Connectbot and create a new connection, choosing the type "local" instead of "ssh", and naming it "privoxy".
+4. Connect and then disconnect this new connection.
+5. Long press on the connection name to open the context menu and choose "Edit Host". In this menu select "post-login automation" and enter "sh /sdcard/privoxy.start" followed by a newline.
+5. Start the connection and Privoxy should start. The config is default, except /etc and /var are changed to /sdcard/etc and /sdcard/var.
+6. To configure your Android device to use Privoxy, proxy configuration is achieved per-network as follows:
+
+- for mobile data, you configure proxy settings in the mobile network APN (Android Settings -> "mobile networks" → "APNs").
+- for wifi, long press on each wifi connection you use, scroll and tick 'advanced settings' then select 'manual' for proxy type.
+- in both cases, the proxy server address is 127.0.0.1 and the port is 8118.
+
+
+Altering DNS configuration
+
+For reasons detailed below, this installer ships with the file /sdcard/etc/resolv.conf in order to support DNS resolution. The installation default is to use OpenDNS' servers, but you are free to change these at your preference.
+
+
+Background to this release
+
+This Privoxy release is a cross-compilation from the Gentoo privoxy package. In order to work on Android's proprietary version of linux, a variety of changes were required to Privoxy's dependent libraries, including adjusting the pathnames of some system files, either because they do not exist on Android (e.g. resolv.conf) or because of the need to install this release on the /sdcard partition.
+
+The curious amongst you will wonder how Privoxy can be executed at all from the /sdcard partition, given Android's security model. The secret sauce is in the 'privoxy.start' script, which copies the binary to Connectbot's directory prior to execution.
+
+
+Manual cross-compilation
+
+For those interested in customising their Android privoxy build, cross-compilation instructions are published here: https://wiki.gentoo.org/wiki/Cross_build_environment#Example:_Use_a_statically_linked_privoxy_on_Android
